@@ -80,7 +80,7 @@
                 userPayoff,
                 opponentPayoff,
                 userStrategy,
-                opponentStrategy,
+                computerChoice,
             };
             history = [...history, newRound];
             playCount++;
@@ -146,7 +146,7 @@
                     <tr transition:fade={{ delay: i * 100 }}>
                         <td>{round.round}</td>
                         <td>{round.userStrategy}</td>
-                        <td>{round.opponentStrategy}</td>
+                        <td>{round.computerChoice}</td>
                         <td>{round.userPayoff}</td>
                         <td>{round.opponentPayoff}</td>
                     </tr>
