@@ -3,9 +3,7 @@
 </script>
 
 <main>
-  <div class="container">
-    <Slideshow />
-  </div>
+  <Slideshow />
 </main>
 
 <style>
@@ -35,12 +33,5 @@
     line-height: 2;
     font-size: 24px;
     color: var(--color-text);
-  }
-
-  .container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh; /* Set the container height to full viewport height */
   }
 </style>

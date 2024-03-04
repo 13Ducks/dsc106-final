@@ -2,7 +2,7 @@
     import { onMount } from "svelte";
     import Game from "./Game.svelte";
 
-    const NUM_GAMES = 2;
+    const NUM_GAMES = 10;
 
     let currentScore = 0;
     let gamesPlayedOnCurrentSlide = 0;
@@ -74,9 +74,6 @@
         { component: Game, props: { opponentStrategy: "Pavlov" } },
         {
             content: `<p>You scored ${currentScore}! Now to see the overall results...</p>`,
-        },
-        {
-            content: `<p>You'll play 10 times against 4 imaginary opponents with different playstyles. Let's see how you do! For simplicity, we'll change the terminology (testify = defect and silent = cooperate) and reverse the game so a bigger number is better (defecting while the other cooperates is +3)</p>`,
         },
     ];
 

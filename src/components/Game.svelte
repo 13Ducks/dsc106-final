@@ -16,7 +16,7 @@
     let animating = false; // Animation trigger
 
     const strategies = ["Cooperate", "Defect"];
-    const NUM_GAMES = 5;
+    const NUM_GAMES = 10;
 
     const payoffs = {
         "Cooperate-Cooperate": { user: 2, opponent: 2 },
@@ -34,9 +34,9 @@
     $: {
         const rootStyle = document.documentElement.style;
         if (userStrategy === "Defect") {
-            rootStyle.setProperty("--user-translateX-vw", "42vw");
+            rootStyle.setProperty("--user-translateX-vw", "18vw");
         } else if (userStrategy === "Cooperate") {
-            rootStyle.setProperty("--user-translateX-vw", "40vw");
+            rootStyle.setProperty("--user-translateX-vw", "16vw");
         }
     }
 
@@ -80,7 +80,7 @@
                 userPayoff,
                 opponentPayoff,
                 userStrategy,
-                computerChoice,
+                opponentStrategy,
             };
             history = [...history, newRound];
             playCount++;
@@ -93,57 +93,67 @@
 </script>
 
 <div>
-    <h3>Choose Your Strategy:</h3>
-    {#each strategies as strategy}
-        <label>
-            <input
-                type="radio"
-                bind:group={userStrategy}
-                value={strategy}
-            />{strategy}
-        </label>
-    {/each}
-    <button
-        on:click={playGame}
-        disabled={animating || userStrategy === "" || playCount >= NUM_GAMES}
-        >Play</button
-    >
+    <div class="game-layout">
+        <div class="game-play">
+            <h3>Choose Your Strategy:</h3>
+            {#each strategies as strategy}
+                <label>
+                    <input
+                        type="radio"
+                        bind:group={userStrategy}
+                        value={strategy}
+                    />{strategy}
+                </label>
+            {/each}
+            <button
+                on:click={playGame}
+                disabled={animating ||
+                    userStrategy === "" ||
+                    playCount >= NUM_GAMES}>Play</button
+            >
 
-    <div class="choice-container">
-        <div class="choice user-choice {animating ? 'animate-user' : ''}">
-            {#if userStrategy}{userStrategy}{/if}
-            <span class="score user-score">{userPayoff}</span>
+            <div class="choice-container">
+                <div
+                    class="choice user-choice {animating ? 'animate-user' : ''}"
+                >
+                    {#if userStrategy}{userStrategy}{/if}
+                    <span class="score user-score">{userPayoff}</span>
+                </div>
+                <div
+                    class="choice computer-choice {animating
+                        ? 'animate-computer'
+                        : ''}"
+                >
+                    {#if animating}{computerChoice}{/if}
+                    <!-- Show computer choice when userStrategy is set -->
+                    <span class="score opponent-score">{opponentPayoff}</span>
+                </div>
+            </div>
         </div>
-        <div
-            class="choice computer-choice {animating ? 'animate-computer' : ''}"
-        >
-            {#if animating}{computerChoice}{/if}
-            <!-- Show computer choice when userStrategy is set -->
-            <span class="score opponent-score">{opponentPayoff}</span>
+        <div class="game-history">
+            <h3>Results:</h3>
+            <p>User Score: {userPayoff}</p>
+            <p>Opponent Score: {opponentPayoff}</p>
+
+            <h3>Game History:</h3>
+            <table transition:fade>
+                <tr
+                    ><th>Round</th><th>Your Strategy</th><th
+                        >Opponent Strategy</th
+                    ><th>Your Score</th><th>Opponent Score</th></tr
+                >
+                {#each history as round, i (round.round)}
+                    <tr transition:fade={{ delay: i * 100 }}>
+                        <td>{round.round}</td>
+                        <td>{round.userStrategy}</td>
+                        <td>{round.opponentStrategy}</td>
+                        <td>{round.userPayoff}</td>
+                        <td>{round.opponentPayoff}</td>
+                    </tr>
+                {/each}
+            </table>
         </div>
     </div>
-
-    <h3>Results:</h3>
-    <p>User Score: {userPayoff}</p>
-    <p>Opponent Score: {opponentPayoff}</p>
-
-    <h3>Game History:</h3>
-    <table transition:fade>
-        <tr
-            ><th>Round</th><th>Your Strategy</th><th>Opponent Strategy</th><th
-                >Your Score</th
-            ><th>Opponent Score</th></tr
-        >
-        {#each history as round, i (round.round)}
-            <tr transition:fade={{ delay: i * 100 }}>
-                <td>{round.round}</td>
-                <td>{round.userStrategy}</td>
-                <td>{round.computerChoice}</td>
-                <td>{round.userPayoff}</td>
-                <td>{round.opponentPayoff}</td>
-            </tr>
-        {/each}
-    </table>
 </div>
 
 <style>
@@ -197,7 +207,7 @@
     .animate-computer {
         /* Assuming -425% is the desired end point, convert this to an equivalent vw unit based on your layout */
         transform: translateX(
-            -38vw
+            -13vw
         ); /* Example value, adjust based on your layout */
     }
 
@@ -258,5 +268,24 @@
     .animate-computer .opponent-score {
         transform: translateX(0) translateY(-20px); /* Adjust to control the emergence point */
         opacity: 1; /* Make scores visible upon collision */
+    }
+    .game-layout {
+        display: flex;
+        justify-content: space-between; /* Aligns children (game play and history) on each side */
+    }
+
+    .game-play,
+    .game-history {
+        flex: 1; /* Each takes up equal width */
+        margin: 10px; /* Optional: Adds some space around each section */
+    }
+
+    /* Additional styles to ensure the game play area and history are well-presented */
+    .game-play {
+        max-width: 50%; /* Limit the width to avoid stretching too much */
+    }
+
+    .game-history {
+        max-width: 50%; /* Limit the width for a more readable table */
     }
 </style>
