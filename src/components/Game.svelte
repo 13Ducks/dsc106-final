@@ -29,6 +29,7 @@
     // Update computerChoice whenever userStrategy changes
     $: if (userStrategy) {
         computerChoice = getChoice(opponentStrategy);
+        console.log(computerChoice);
     }
     // Reactive statement to update CSS variable based on userStrategy
     $: {
@@ -51,6 +52,7 @@
             }
         }
         if (strategy == "Pavlov") {
+            console.log(playCount, lastComputerStrategy, lastUserStrategy);
             if (playCount == 0) {
                 return "Cooperate";
             } else if (lastUserStrategy == lastComputerStrategy) {
@@ -60,10 +62,10 @@
             }
         }
     };
-    let showChoices = false;
 
     const playGame = async () => {
         if (!userStrategy) return; // Do nothing if no strategy is selected
+        computerChoice = getChoice(opponentStrategy);
 
         showChoices = true;
         animating = true; // Start animation
@@ -287,5 +289,23 @@
 
     .game-history {
         max-width: 50%; /* Limit the width for a more readable table */
+    }
+    button {
+        background-color: #9ba0a8; /* Blue background */
+        color: #ffffff; /* White text */
+        padding: 10px 20px; /* Top and bottom padding, left and right padding */
+        border: none; /* No border */
+        border-radius: 5px; /* Rounded corners */
+        cursor: pointer; /* Cursor changes to a pointer on hover */
+        font-size: 16px; /* Larger font size */
+        transition: background-color 0.6s; /* Smooth transition for background color */
+    }
+
+    button:hover {
+        background-color: #0056b3; /* Darker blue on hover */
+    }
+
+    button:disabled {
+        background-color: #cccccc; /* Gray background for disabled state */
     }
 </style>

@@ -77,7 +77,7 @@
         },
     ];
 
-    let currentSlide = 0;
+    let currentSlide = 12;
 
     // Reactively update the disableMove based on currentSlide and gamesPlayedOnCurrentSlide
     $: disableForward =
@@ -131,7 +131,7 @@
 </script>
 
 <div>
-    <p style="font-size: small">Slide {currentSlide}</p>
+    <p style="font-size: small">Slide {currentSlide + 1}</p>
     {#if slides[currentSlide].content}
         {@html slides[currentSlide].content}
     {:else if slides[currentSlide].component}
@@ -144,8 +144,72 @@
 
     <button on:click={prevSlide} disabled={disableBackward}>Previous</button>
     <button on:click={nextSlide} disabled={disableForward}>Next</button>
+
+    <div class="slides-navigation">
+        {#each slides as _, index}
+            <!-- svelte-ignore a11y-click-events-have-key-events -->
+            <!-- svelte-ignore a11y-no-noninteractive-tabindex -->
+            <!-- svelte-ignore a11y-no-static-element-interactions -->
+            <span
+                class="dot"
+                class:active={index === currentSlide}
+                class:past={index < currentSlide}
+                on:click={() => (currentSlide = index)}
+                tabindex="0"
+                aria-label={`Go to slide ${index + 1}`}
+            ></span>
+        {/each}
+    </div>
 </div>
 
 <style>
     /* Add your CSS styles here */
+    button {
+        background-color: #9ba0a8; /* Blue background */
+        color: #ffffff; /* White text */
+        padding: 10px 20px; /* Top and bottom padding, left and right padding */
+        border: none; /* No border */
+        border-radius: 5px; /* Rounded corners */
+        cursor: pointer; /* Cursor changes to a pointer on hover */
+        font-size: 16px; /* Larger font size */
+        transition: background-color 0.6s; /* Smooth transition for background color */
+    }
+
+    button:hover {
+        background-color: #0056b3; /* Darker blue on hover */
+    }
+
+    button:disabled {
+        background-color: #cccccc; /* Gray background for disabled state */
+        cursor: not-allowed; /* Cursor indicates button is not clickable */
+    }
+    .slides-navigation {
+        position: absolute;
+        top: 10px;
+        left: 10px;
+        z-index: 10;
+    }
+
+    .dot {
+        height: 10px;
+        width: 10px;
+        margin: 0 5px;
+        background-color: #bbb;
+        border-radius: 50%;
+        display: inline-block;
+        transition: background-color 0.6s ease;
+        cursor: pointer;
+    }
+
+    .dot:hover {
+        background-color: #717171;
+    }
+
+    .dot.active {
+        transform: scale(1.5);
+    }
+
+    .dot.past {
+        background-color: lightgreen; /* Light green color for visited slides */
+    }
 </style>
