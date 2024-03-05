@@ -29,7 +29,6 @@
     // Update computerChoice whenever userStrategy changes
     $: if (userStrategy) {
         computerChoice = getChoice(opponentStrategy);
-        console.log(computerChoice);
     }
     // Reactive statement to update CSS variable based on userStrategy
     $: {
@@ -52,7 +51,6 @@
             }
         }
         if (strategy == "Pavlov") {
-            console.log(playCount, lastComputerStrategy, lastUserStrategy);
             if (playCount == 0) {
                 return "Cooperate";
             } else if (lastUserStrategy == lastComputerStrategy) {
