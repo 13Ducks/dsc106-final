@@ -65,7 +65,6 @@
         if (!userStrategy) return; // Do nothing if no strategy is selected
         computerChoice = getChoice(opponentStrategy);
 
-        showChoices = true;
         animating = true; // Start animation
         await tick(); // Ensure UI updates with the animation start
         setTimeout(() => {
@@ -87,7 +86,6 @@
             dispatch("gamePlayed", { playCount, userPayoff });
 
             animating = false; // Reset animation trigger after completion
-            showChoices = false;
         }, 900); // Adjusted to account for the animation delay and duration
     };
 </script>
