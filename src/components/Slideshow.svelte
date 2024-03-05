@@ -77,7 +77,7 @@
         },
     ];
 
-    let currentSlide = 12;
+    let currentSlide = 0;
 
     // Reactively update the disableMove based on currentSlide and gamesPlayedOnCurrentSlide
     $: disableForward =
