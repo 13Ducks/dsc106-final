@@ -83,7 +83,7 @@
             };
             history = [...history, newRound];
             playCount++;
-            dispatch("gamePlayed", { playCount, userPayoff });
+            dispatch("gamePlayed", { playCount, userPayoff, opponentStrategy });
 
             animating = false; // Reset animation trigger after completion
         }, 900); // Adjusted to account for the animation delay and duration

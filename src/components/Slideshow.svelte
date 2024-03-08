@@ -1,11 +1,14 @@
 <script>
     import { onMount } from "svelte";
     import Game from "./Game.svelte";
+    import Simulation from "./Simulation.svelte";
 
     const NUM_GAMES = 10;
 
+    let pastScores = { Cooperate: 0, Defect: 0, TFT: 0, Pavlov: 0 };
     let currentScore = 0;
     let gamesPlayedOnCurrentSlide = 0;
+    let simDone = false;
     let disableForward = false;
     let disableBackward = false;
 
@@ -13,6 +16,7 @@
         let data = event.detail;
         gamesPlayedOnCurrentSlide = data["playCount"];
         currentScore = data["userPayoff"];
+        pastScore[data["opponentStrategy"]] = data["userPayoff"];
     };
 
     let slides;
@@ -75,15 +79,40 @@
         {
             content: `<p>You scored ${currentScore}! Now to see the overall results...</p>`,
         },
+        {
+            content: `<p>Against the Always Cooperate bot, you scored ${pastScores["Cooperate"]}.</p>
+                      <p>Against the Always Defect bot, you scored ${pastScores["Defect"]}.</p>
+                      <p>Against the Tit for Tat bot, you scored ${pastScores["TFT"]}.</p>
+                      <p>Against the Pavlov bot, you scored ${pastScores["Pavlov"]}.</p>
+                      <br/>
+                      <p>While defecting will always mean you don't <i>lose</i>, it is possible to score more points overall by cooperating. For example, if you always cooperate against the <b>Tit for Tat</b> bot which repeats your action, you could gain a maximum of 10*2 = 20 points. But if you always defected, you would win the first one, but the bot would defect afterwards, totalling points to 3 + 1*9 = 12. In the long run, choosing a greedy option might not be the right choice, as others know what you have done in the past and shape their actions around that.</p>
+                      <br/>
+                      <p>Next we'll see a simulation of these bots playing against each other.`,
+        },
+        { component: Simulation },
+        {
+            content: `<p>The Always Cooperate bot scored a total of 600 points.</p>
+                      <p>The Always Defect bot scored a total of 702 points.</p>
+                      <p>The Tit for Tat bot scored a total of 699 points.</p>
+                      <p>The Pavlov bot scored a total of 650 points.</p>
+                      <br/>
+                      <p>Even though Always Defect scored the most in this case, it was close between that and Tit for Tat. Furthermore, in many studies of this game, the game is evolutionary (winners repopulate) and schocastic (small chance of randomness). In these cases which are more reflective of the real world, TFT and other strategies that are able to cooperate tend to perform better and win over time.</p>`,
+        },
+        {
+            content: `<p>Thanks for playing!</p>`,
+        },
     ];
 
     let currentSlide = 0;
 
     // Reactively update the disableMove based on currentSlide and gamesPlayedOnCurrentSlide
     $: disableForward =
-        slides[currentSlide].component &&
-        slides[currentSlide].component == Game &&
-        gamesPlayedOnCurrentSlide < NUM_GAMES;
+        (slides[currentSlide].component &&
+            slides[currentSlide].component == Game &&
+            gamesPlayedOnCurrentSlide < NUM_GAMES) ||
+        (slides[currentSlide].component &&
+            slides[currentSlide].component == Simulation &&
+            !simDone);
 
     $: disableBackward = currentSlide > 5;
 
@@ -139,6 +168,9 @@
             this={slides[currentSlide].component}
             {...slides[currentSlide].props}
             on:gamePlayed={handleGamePlayed}
+            on:simDone={() => {
+                simDone = true;
+            }}
         />
     {/if}
 
@@ -154,7 +186,9 @@
                 class="dot"
                 class:active={index === currentSlide}
                 class:past={index < currentSlide}
-                on:click={() => (currentSlide = index)}
+                on:click={() => {
+                    currentSlide = index;
+                }}
                 tabindex="0"
                 aria-label={`Go to slide ${index + 1}`}
             ></span>
