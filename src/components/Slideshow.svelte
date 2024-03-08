@@ -16,7 +16,7 @@
         let data = event.detail;
         gamesPlayedOnCurrentSlide = data["playCount"];
         currentScore = data["userPayoff"];
-        pastScore[data["opponentStrategy"]] = data["userPayoff"];
+        pastScores[data["opponentStrategy"]] = data["userPayoff"];
     };
 
     let slides;
@@ -114,7 +114,7 @@
             slides[currentSlide].component == Simulation &&
             !simDone);
 
-    $: disableBackward = currentSlide > 5;
+    $: disableBackward = currentSlide > 5 && currentSlide < 15;
 
     const nextSlide = () => {
         if (
