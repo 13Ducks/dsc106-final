@@ -182,13 +182,24 @@
         /* Adjusted for collision */
         /* Assuming 930% and -625% are your desired collision points */
         transition:
-            transform 0.4s ease-in-out,
-            opacity 0.4s ease;
+            transform 0.1s ease-in,
+            transform 0.15s ease-out,
+            opacity 0.2s ease;
     }
 
     @keyframes moveToCollision {
         0% {
             transform: translateX(0%); /* Start from original position */
+        }
+        45% {
+            /* Move towards the collision point more quickly */
+            transform: translateX(
+                calc(var(--user-translateX-vw) / 2 - 5px)
+            ); /* Adjust if needed for collision point */
+        }
+        55% {
+            /* Immediately start moving back after a brief collision state */
+            transform: translateX(calc(var(--user-translateX-vw) / 2));
         }
         100% {
             /* Adjust these values to the point where they should collide */
