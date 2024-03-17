@@ -82,8 +82,8 @@
         {
             content: `<p>Against the Always Cooperate bot, you scored ${pastScores["Cooperate"]}.</p>
                       <p>Against the Always Defect bot, you scored ${pastScores["Defect"]}.</p>
-                      <p>Against the Tit for Tat bot, you scored ${pastScores["TFT"]}.</p>
-                      <p>Against the Pavlov bot, you scored ${pastScores["Pavlov"]}.</p>
+                      <p>Against the Tit for Tat bot (repeat your action), you scored ${pastScores["TFT"]}.</p>
+                      <p>Against the Pavlov bot (cooperate if same action), you scored ${pastScores["Pavlov"]}.</p>
                       <br/>
                       <p>While defecting will always mean you don't <i>lose</i>, it is possible to score more points overall by cooperating. For example, if you always cooperate against the <b>Tit for Tat</b> bot which repeats your action, you could gain a maximum of 10*2 = 20 points. But if you always defected, you would win the first one, but the bot would defect afterwards, totalling points to 3 + 1*9 = 12. In the long run, choosing a greedy option might not be the right choice, as others know what you have done in the past and shape their actions around that.</p>
                       <br/>
@@ -196,7 +196,20 @@
     </div>
 </div>
 
+{#if currentSlide < 5}
+    <div class="youtube">
+        <a href="https://youtu.be/n_Xaof0LFSk">Explanation Video</a>
+    </div>
+{/if}
+
 <style>
+    .youtube {
+        position: absolute;
+        bottom: 20px;
+        right: 0;
+        left: 0;
+        text-align: center;
+    }
     /* Add your CSS styles here */
     button {
         background-color: #9ba0a8; /* Blue background */
